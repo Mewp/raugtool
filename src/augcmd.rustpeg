@@ -1,0 +1,30 @@
+_ = [ ]+
+name = ([^\][/=) \t\n] / "\\" .)+
+predicate_inner = [^\]]* / predicate
+predicate = "[" predicate_inner "]"
+name_test = "*" / name
+axis_name = "ancestor" / "ancestor-or-self" / "child" / "descendant" / "descendant-or-self" / "parent" / "self" / "root"
+axis_specifier = axis_name "::"
+step = axis_specifier? name_test predicate* / "." / ".."
+relative_location_path = step ** "/" ("//" step)?
+abbreviated_absolute_location_path = "//" relative_location_path
+absolute_location_path = "/" relative_location_path / abbreviated_absolute_location_path
+location_path = absolute_location_path / relative_location_path
+number = [0-9]+
+literal = "\"" [^"]* "\"" / "'" [^']* "'"
+parens_inner = [^)]* / parens
+parens = "(" parens_inner ")"
+function_call = name parens
+primary_expr = literal / number / function_call / parens
+#[pub] path_expr -> String = r:$(location_path / primary_expr) {
+    r.to_owned()
+}
+
+cmd_name = "load" / "quit" / "retrieve" / "save" / "store" / "transform" / "dump-xml" / "get" / "label" / "ls" / "match" / "print" / "errors" / "span" / "clear" / "clearm" / "ins" / "insert" / "mv" / "move" / "cp" / "copy" / "rename" / "rm" / "set" / "setm" / "touch" / "defnode" / "defvar"
+
+reorder -> Command = "reorder" _ a:path_expr _ o:$("before" / "after") _ b:path_expr {
+    if o == "before" { Command::Reorder(a.to_owned(), true, b.to_owned()) }
+    else { Command::Reorder(a.to_owned(), false, b.to_owned()) }
+}
+
+#[pub] cmd -> Command = reorder / r:$(cmd_name [^\n]*) { Command::Foreign(r.to_owned()) }

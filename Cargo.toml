@@ -1,0 +1,14 @@
+[package]
+build = "build.rs"
+name = "raugtool"
+version = "0.1.0"
+authors = ["Błażej Święcicki <blazej.swiecicki@pixers.pl>"]
+
+[dependencies]
+rustyline = "1.0.0"
+
+[dependencies.augeas]
+git = "https://github.com/Mewp/rust-augeas"
+
+[build-dependencies]
+peg = "*"
