@@ -17,10 +17,14 @@ mod augcmd {
         match *cmd {
             Command::Foreign(ref cmd) => aug.run(&cmd),
             Command::Reorder(ref from, before, ref to) => {
+                let matches = aug.matches(&to)?;
+                if matches.len() == 0 {
+                    return Ok("".into())
+                }
                 let dest = if before {
-                    aug.matches(&to)?[0].clone()
+                    matches[0].clone()
                 } else {
-                    aug.matches(&to)?.last().unwrap().clone()
+                    matches.last().unwrap().clone()
                 };
                 for src in aug.matches(&from).unwrap() {
                     let mut marker = dest.clone();
