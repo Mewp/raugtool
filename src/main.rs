@@ -42,7 +42,7 @@ mod augcmd {
 
 
 fn main() {
-    let mut aug = Augeas::new("test", "", AugFlag::None).unwrap();
+    let mut aug = Augeas::new("/", "", AugFlag::None).unwrap();
 
     let mut rl = rustyline::Editor::<()>::new();
     while let Ok(line) = rl.readline("augtool> ") {
