@@ -20,7 +20,7 @@ primary_expr = literal / number / function_call / parens
     r.to_owned()
 }
 
-cmd_name = "load" / "quit" / "retrieve" / "save" / "store" / "transform" / "dump-xml" / "get" / "label" / "ls" / "match" / "print" / "errors" / "span" / "clear" / "clearm" / "ins" / "insert" / "mv" / "move" / "cp" / "copy" / "rename" / "rm" / "set" / "setm" / "touch" / "defnode" / "defvar"
+cmd_name = "load" / "quit" / "retrieve" / "save" / "store" / "transform" / "dump-xml" / "get" / "label" / "ls" / "match" / "print" / "errors" / "span" / "clear" / "clearm" / "ins" / "insert" / "mv" / "move" / "cp" / "copy" / "rename" / "rm" / "set" / "setm" / "touch" / "defnode" / "defvar" / "#"
 
 reorder -> Command = "reorder" _ a:path_expr _ o:$("before" / "after") _ b:path_expr {
     if o == "before" { Command::Reorder(a.to_owned(), true, b.to_owned()) }
